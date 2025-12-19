@@ -7,24 +7,28 @@
     </ion-toolbar>
 </ion-header>
 
+
 <ion-content [fullscreen]="true">
   <div #container>
-    <div class="dashboard-content">
-      <div class="dashboard-flex">
-        <div class="seccion dashboard">
-           <app-bar-chart [backgroundColorCat]="backgroundColorCategoria" [borderColorCat]="borderColorCategoria"></app-bar-chart>
-        </div>
-        <div class="seccion dashboard">
-          <app-line-chart class="seccion dashboard"></app-line-chart>
-        </div>
-        <div class="seccion dashboard">
-            <app-pie-chart class="seccion dashboard"></app-pie-chart>
-        </div>    
-      </div>
-          
-      <div class="seccion header">
+    <div class="seccion header">
         <h1>Dashboard</h1>
+    </div>
+    <div class="dashboard-content">
+      <div class="seccion dashboard-charts">
+        <div class="dashboard-flex">
+          <div class="dashboard">
+            <app-bar-chart [backgroundColorCat]="backgroundColorCategoria" [borderColorCat]="borderColorCategoria"></app-bar-chart>
+          </div>
+          <div class="dashboard">
+              <app-pie-chart></app-pie-chart>
+          </div> 
+          <div class="dashboard">
+            <app-line-chart></app-line-chart>
+          </div>             
+        </div>
       </div>
+    
+      
 
       <div class="seccion table-container">
         <app-tablas [datosTabla]="datosTablaTab1"></app-tablas>
@@ -40,7 +44,6 @@
       <div class="seccion table-container">
         <app-tablas [datosTabla]="datosTablaTab1"></app-tablas>
       </div>
-
-    </div>
+    </div>  
   </div>
 </ion-content>

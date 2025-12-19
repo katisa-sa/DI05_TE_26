@@ -141,26 +141,28 @@ export class Tab1Page {
     let contSections = 0;
     //Definimos de que height queremos que empiece a dibujar nuestro PDF.
     let headerHeight = 55; //Altura del padding que le hemos dado al header
-    let footerHeight = 10; //Altura del padding que le hemos dado al footer
+    let footerHeight = 30; //Altura del padding que le hemos dado al footer
     let currentPageHeight = headerHeight+footerHeight;
 
-    while (currentSectionIndex < totalSections) {
-      const section = sections[currentSectionIndex];
-      html2canvas(section).then(canvas => {
+    const promises = Array.from(sections).map(section => 
+      html2canvas(section, {scale: 1})
+      );
+
+    Promise.all(promises).then(canvases =>{canvases.forEach(canvas => {
         const imageData = canvas.toDataURL('image/jpg');
         const width = doc.internal.pageSize.getWidth();
         /*Se calcula el height dependiendo del width del canvas y su relación con el width. 
          *Esto se hace para que la imagen mantenga dimensiones proporcionales según el width de la página.
          */
         const height = canvas.height * (width / canvas.width);
+        
         if (currentPageHeight + height >= doc.internal.pageSize.getHeight()) {
           doc.addPage();
-          currentPageHeight = headerHeight+footerHeight;
-          //currentPageHeight = headerHeight + footerHeight;
+          currentPageHeight = headerHeight + footerHeight;
           //this.addPageConfig(doc);
         }
         //this.addPageConfig(doc);
-        doc.addImage(imageData, 'JPG', 0, currentPageHeight - footerHeight, width, height);
+        doc.addImage(imageData, 'JPG', 0, currentPageHeight, width, height);
         currentPageHeight += height;
         contSections++;
         if (contSections === totalSections) {
@@ -172,34 +174,36 @@ export class Tab1Page {
       //Sumamos 1, para que el bucle realice todas las peticiones, una por cada sección
       currentSectionIndex++;
     }
+    );
   }
 
   addPageConfig(doc:jsPDF) {
+    const totalPaginas = doc.getNumberOfPages();
     for (let i = 1; i <= doc.getNumberOfPages(); i++) {
       // Añadimos la págin
       doc.setPage(i);
+      // Le asignamos un tamaño a las letras
+      doc.setFontSize(10);
+      doc.setFillColor('#CCCCCC');
+      doc.rect(5, 5, doc.internal.pageSize.width-10, 45, 'F'); // Rectángulo de fondo del header
+      doc.line(0, 55, doc.internal.pageSize.width, 55);
       // Añadimos el logotipo, sus valores y posición
       const imagen = "/assets/icon/favicon.png";
       const imgWidth = 45; // Ancho de la imagen
       const imgHeight = 45; // Alto de la imagen
-      const imgX = (doc.internal.pageSize.width/2)-(imgWidth/2); // Posición X de la imagen
+      const imgX = doc.internal.pageSize.width/2; // Posición X de la imagen
       const imgY = 5; // Posición Y de la imagen
       doc.addImage(imagen, "JPG", imgX, imgY, imgWidth, imgHeight);
-      // Le asignamos un tamaño a las letras
-      doc.setFontSize(10);
-      doc.setFillColor('#CCCCCC');
-      doc.rect(5, 5, doc.internal.pageSize.width, 45, 'F'); // Rectángulo de fondo del header
-      doc.line(0, 55, doc.internal.pageSize.width, 55);
       // Añadimos información de la empresa
       const nombreEmpresa = "Merluzas Paca S.L.";
       const telefono = "Teléfono: 945 123 456";
       const direccion = "Dirección: Calle Pescatore, 13";
       const texto = nombreEmpresa+'\n'+telefono+'\n'+direccion;
-      doc.text(texto, doc.internal.pageSize.width - 120, 10, {baseline:'bottom'});
+      doc.text(texto, 10, 15, {baseline:'bottom'});
       // Añadimos la paginación
-      doc.text("Página "+i, doc.internal.pageSize.width - 100, doc.internal.pageSize.height - 10, {baseline:'bottom'});
       doc.setFillColor('#CCCCCC');
-      doc.rect(10, doc.internal.pageSize.height - 10, doc.internal.pageSize.width, 10, 'F'); // Rectángulo de fondo del footer
+      doc.rect(5, doc.internal.pageSize.height - 20, doc.internal.pageSize.width-10, 15, 'F'); // Rectángulo de fondo del footer
+      doc.text("Página "+i + " de " + totalPaginas, doc.internal.pageSize.width/2, doc.internal.pageSize.height - 10, {baseline:'bottom'});
     }
   }
 }
