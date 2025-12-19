@@ -1,0 +1,33 @@
+.titulo-tabla {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+.divTabla{
+    padding: 20px;
+}
+
+.mi-tabla {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mi-tabla th, .mi-tabla td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.mi-tabla th {
+    background-color: #86e2ee;
+}
+
+.mi-tabla tr:nth-child(even) {
+    background-color: #e6f2f7;
+}
+
+.mi-tabla tr:hover {
+    background-color: #ddd;
+}

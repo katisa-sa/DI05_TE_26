@@ -1,17 +1,46 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 1
+    <ion-title class="ion-text-center">
+      DASHBOARD
     </ion-title>
-  </ion-toolbar>
+    <ion-button (click)="generarPDF()">Generar PDF</ion-button>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div #container>
+    <div class="dashboard-content">
+      <div class="dashboard-flex">
+        <div class="seccion dashboard">
+           <app-bar-chart [backgroundColorCat]="backgroundColorCategoria" [borderColorCat]="borderColorCategoria"></app-bar-chart>
+        </div>
+        <div class="seccion dashboard">
+          <app-line-chart class="seccion dashboard"></app-line-chart>
+        </div>
+        <div class="seccion dashboard">
+            <app-pie-chart class="seccion dashboard"></app-pie-chart>
+        </div>    
+      </div>
+          
+      <div class="seccion header">
+        <h1>Dashboard</h1>
+      </div>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+      <div class="seccion table-container">
+        <app-tablas [datosTabla]="datosTablaTab1"></app-tablas>
+      </div>
+
+      <div class="seccion list-container">
+        <h2>List</h2>
+        <ul *ngFor="let lista of datosLista">
+          <li>{{lista}}</li>
+        </ul>
+      </div>
+
+      <div class="seccion table-container">
+        <app-tablas [datosTabla]="datosTablaTab1"></app-tablas>
+      </div>
+
+    </div>
+  </div>
 </ion-content>
